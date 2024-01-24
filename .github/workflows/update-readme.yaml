@@ -12,6 +12,9 @@ on:
       repo-ref:
         required: true
         type: string
+      clone-path:
+        required: true
+        type: string
 
 jobs:
   skills-boost-badges:
@@ -20,14 +23,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/checkout@v4
+        name: Checkout '${{ inputs.repo-ref }}' to '${{ inputs.clone-path }}'
         with:
           repository: ${{ inputs.repo-ref }}
+          path: ${{ inputs.clone-path }}
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           # Semantic version range syntax
-          python-version: "3.x"
-          architecture: "x64"
+          python-version: 3.x
+          architecture: x64
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
       - name: Install dependencies
