@@ -15,9 +15,9 @@ on:
       repo-ref:
         required: true
         type: string
-      # clone-path:
-      #   required: true
-      #   type: string
+      clone-path:
+        required: true
+        type: string
 
 jobs:
   skills-boost-badges:
@@ -32,7 +32,9 @@ jobs:
         with:
           repository: ${{ inputs.repo-name }}
           ref: ${{ inputs.repo-ref }}
-          # path: ${{ inputs.clone-path }}
+          path: ${{ inputs.clone-path }}
+          sparse-checkout: ${{ inputs.clone-path }}
+          sparse-checkout-cone-mode: false
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -43,16 +45,20 @@ jobs:
         run: python -c "import sys; print(sys.version)"
       - name: Install dependencies
         run: |
-          ls -R
           python -m pip install --upgrade pip
           pip install bs4
+      - name: Setup directories
+        run: |
+          pwd
+          mv ${{ inputs.clone-path }}/* readme/
+          ls -R
+          cd readme
       - name: Check for updated Skills Boost Badges
-        run: python -u ./gcp-skills-boost-badges/import-skills-boost.py ${{ inputs.skills-boost-url }} ${{ inputs.badge-count }}
+        run: python -u import-skills-boost.py ${{ inputs.skills-boost-url }} ${{ inputs.badge-count }}
       - name: Commit and push
         run: |-
           git diff
           git config --global user.email "actions@users.noreply.github.com"
           git config --global user.name "README-bot"
-          git add -A
           git commit -m "Update badges" || git commit --allow-empty -m "Empty commit"
           git push
