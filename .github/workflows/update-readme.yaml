@@ -35,5 +35,13 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      - name: Import Skills Boost Badges
+      - name: Check for updated Skills Boost Badges
         run: python -u import-skills-boost.py ${{ inputs.skills-boost-url }} ${{ inputs.badge-count }}
+      - name: Commit and push
+        run: |-
+          git diff
+          git config --global user.email "actions@users.noreply.github.com"
+          git config --global user.name "README-bot"
+          git add -A
+          git commit -m "Update badges" || git commit --allow-empty -m "Empty commit"
+          git push
