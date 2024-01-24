@@ -1,7 +1,17 @@
 name: Import Skills Badges
+
 on:
-  schedule:
-    - cron: "12 */12 * * *" # Update every 12 hours on the 12th minute
+  workflow_call:
+    inputs:
+      skills-boost-url:
+        required: true
+        type: string
+      badge-count:
+        required: true
+        type: number
+    secrets:
+      token:
+        required: true
 
 jobs:
   skills-boost-badges:
@@ -14,14 +24,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python
-        # This is the version of the action for setting up Python, not the Python version.
         uses: actions/setup-python@v4
         with:
-          # Semantic version range syntax or exact version of a Python version
+          # Semantic version range syntax
           python-version: "3.x"
-          # Optional - x64 or x86 architecture, defaults to x64
           architecture: "x64"
-      # You can test your matrix by printing the current Python version
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
       - name: Install dependencies
