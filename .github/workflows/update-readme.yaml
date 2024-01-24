@@ -31,6 +31,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
+          ls
           pip install -r ./gcp-skills-boost-badges/requirements.txt
       - name: Check for updated Skills Boost Badges
         run: python -u ./gcp-skills-boost-badges/import-skills-boost.py ${{ inputs.skills-boost-url }} ${{ inputs.badge-count }}
