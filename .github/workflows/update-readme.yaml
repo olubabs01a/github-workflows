@@ -9,9 +9,6 @@ on:
       badge-count:
         required: true
         type: number
-    secrets:
-      token:
-        required: true
 
 jobs:
   skills-boost-badges:
