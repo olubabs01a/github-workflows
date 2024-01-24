@@ -15,9 +15,9 @@ on:
       repo-ref:
         required: true
         type: string
-      clone-path:
-        required: true
-        type: string
+      # clone-path:
+      #   required: true
+      #   type: string
 
 jobs:
   skills-boost-badges:
@@ -32,7 +32,7 @@ jobs:
         with:
           repository: ${{ inputs.repo-name }}
           ref: ${{ inputs.repo-ref }}
-          path: ${{ inputs.clone-path }}
+          # path: ${{ inputs.clone-path }}
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
