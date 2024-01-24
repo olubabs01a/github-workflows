@@ -45,7 +45,7 @@ jobs:
         run: |
           ls -R
           python -m pip install --upgrade pip
-          pip install -r ./gcp-skills-boost-badges/requirements.txt
+          pip install bs4
       - name: Check for updated Skills Boost Badges
         run: python -u ./gcp-skills-boost-badges/import-skills-boost.py ${{ inputs.skills-boost-url }} ${{ inputs.badge-count }}
       - name: Commit and push
