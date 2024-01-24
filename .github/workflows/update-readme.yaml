@@ -20,7 +20,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/checkout@v4
-        with: ${{ inputs.repo_ref }}
+        with:
+          repository: ${{ inputs.repo-ref }}
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
