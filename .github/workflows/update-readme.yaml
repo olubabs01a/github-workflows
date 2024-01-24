@@ -9,6 +9,9 @@ on:
       badge-count:
         required: true
         type: number
+      repo-name:
+        required: true
+        type: string
       repo-ref:
         required: true
         type: string
@@ -25,7 +28,8 @@ jobs:
       - uses: actions/checkout@v4
         name: Checkout '${{ inputs.repo-ref }}' to '${{ inputs.clone-path }}'
         with:
-          repository: ${{ inputs.repo-ref }}
+          repository: ${{ inputs.repo-name }}
+          ref: ${{ inputs.repo-ref }}
           path: ${{ inputs.clone-path }}
       - name: Set up Python
         uses: actions/setup-python@v4
