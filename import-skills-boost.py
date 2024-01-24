@@ -3,7 +3,8 @@ from bs4 import BeautifulSoup
 import re
 from urllib import request
 
-skillsProfileUrl = 'https://bit.ly/gcp-bab501a'
+skillsProfileUrl = ''
+limit = 3
 
 def generate_readme_text(badges: dict, limit = 3):
     updates = '<!-- start latest badges --><hr />\n'
@@ -58,44 +59,49 @@ def generate_readme_text(badges: dict, limit = 3):
     else:
         raise Exception('Badge destination pattern not found in {}'.format(fileName))
 
-try:
-    with request.urlopen(skillsProfileUrl) as f:
-        contents = f.read()
+def main():
+    try:
+        # Check provided arguments
+        if len(argv) != 3:
+            raise ValueError('Invalid number of arguments provided. Expected: {skillsProfileUrl} {limit}')
+        else:
+            skillsProfileUrl = argv[1]
+            limit = int(argv[2])
 
-        soup = BeautifulSoup(contents, 'html.parser')
+        with request.urlopen(skillsProfileUrl) as f:
+            contents = f.read()
 
-        badges = soup.find('div', attrs={'class': 'profile-badges'})
+            soup = BeautifulSoup(contents, 'html.parser')
 
-        badge_data = dict()
-        
-        for badgeEl in badges:
-            badge = badgeEl.findNext('span')
-            badgeName = badge.text.strip('\r\n')
-            badgeName = re.sub('\s\s+' , ' ', badgeName)
+            badges = soup.find('div', attrs={'class': 'profile-badges'})
 
-            if badgeName != '':
-                completion = badge.find_next_sibling().text.strip('\r\n')
-                completion = re.sub('\s\s+' , ' ', completion)
+            badge_data = dict()
+            
+            for badgeEl in badges:
+                badge = badgeEl.findNext('span')
+                badgeName = badge.text.strip('\r\n')
+                badgeName = re.sub('\s\s+' , ' ', badgeName)
 
-                # Add styling to badge thumbnail
-                thumbnail = badgeEl.findNext('a')               
-                thumbnail.find('img').attrs['style'] = ['max-width: 15rem;']
+                if badgeName != '':
+                    completion = badge.find_next_sibling().text.strip('\r\n')
+                    completion = re.sub('\s\s+' , ' ', completion)
 
-                badge_data[badgeName] = [thumbnail, completion]
+                    # Add styling to badge thumbnail
+                    thumbnail = badgeEl.findNext('a')               
+                    thumbnail.find('img').attrs['style'] = ['max-width: 15rem;']
 
-        badgeCount = len(badge_data)
-        print('{} badge(s) found.'.format(badgeCount))
+                    badge_data[badgeName] = [thumbnail, completion]
 
-        if badgeCount > 0:
-            if len(argv) == 1:
-                limit = 3
-                print('Limit has been set to default of {}.'.format(limit))
-            else:
-                limit = int(argv[1])
+            badgeCount = len(badge_data)
+            print('{} badge(s) found.'.format(badgeCount))
 
-            print('Up to {} badge(s) will be printed.\n'.format(limit))
+            if badgeCount > 0:
+                print('Up to {} badge(s) will be printed.\n'.format(limit))
 
-            generate_readme_text(badge_data, limit)
+                generate_readme_text(badge_data, limit)
 
-except Exception as e:
-    print("An error occurred: ", e)
+    except Exception as e:
+        print("An error occurred: ", e)
+
+if __name__ == "__main__":
+    main()
