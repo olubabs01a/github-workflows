@@ -25,6 +25,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: readme
       - uses: actions/checkout@v4
         name: Checkout '${{ inputs.repo-ref }}' to '${{ inputs.clone-path }}'
         with:
