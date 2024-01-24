@@ -16,10 +16,6 @@ jobs:
   skills-boost-badges:
     name: Import Skills Boost badges at /
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["pypy3.9", "pypy3.10", "3.9", "3.10", "3.11", "3.12"]
-
     steps:
       - uses: actions/checkout@v4
         with:
