@@ -1,4 +1,5 @@
 from sys import argv
+import sys
 from bs4 import BeautifulSoup
 import re
 from urllib import request
@@ -102,6 +103,7 @@ def main():
 
     except Exception as e:
         print("An error occurred: ", e)
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
