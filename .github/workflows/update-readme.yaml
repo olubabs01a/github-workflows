@@ -49,12 +49,11 @@ jobs:
           pip install bs4
       - name: Setup directories
         run: |
-          pwd
-          mv ${{ inputs.clone-path }}/* readme/
-          ls -R
-          cd readme
+          mv ${{ inputs.clone-path }}/${{ inputs.clone-path }}/* readme/
       - name: Check for updated Skills Boost Badges
-        run: python -u import-skills-boost.py ${{ inputs.skills-boost-url }} ${{ inputs.badge-count }}
+        run: |
+          cd readme
+          python -u ./import-skills-boost.py ${{ inputs.skills-boost-url }} ${{ inputs.badge-count }}
       - name: Commit and push
         run: |-
           git diff
