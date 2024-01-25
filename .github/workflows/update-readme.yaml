@@ -61,5 +61,4 @@ jobs:
           git diff
           git config --global user.email "actions@users.noreply.github.com"
           git config --global user.name "README-bot"
-          git commit -m "Update badges" || git commit --allow-empty -m "Empty commit"
-          git push
+          git commit -m "Update badges" && git push || git reset
