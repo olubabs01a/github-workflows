@@ -55,6 +55,7 @@ jobs:
           cd readme
           python -u ./import-skills-boost.py ${{ inputs.skills-boost-url }} ${{ inputs.badge-count }}
       - name: Commit and push
+        if: success()
         run: |-
           git diff
           git config --global user.email "actions@users.noreply.github.com"
