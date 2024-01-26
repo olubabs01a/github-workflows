@@ -7,10 +7,7 @@ from urllib import request
 skillsProfileUrl = ''
 limit = 3
 
-def generate_readme_text(badges: dict, limit = 3):
-    if len(badges) < limit or limit <= 0:
-        limit = len(badges)
-
+def generate_readme_text(badges: dict, limit):
     updates = '<!-- start latest badges --><hr />\n'    
     updates += '### **&#127882; {} Latest Badges from Google Cloud Skills Boost &#127882;**'.format(limit)
     updates += '\n<ol>'
@@ -68,6 +65,9 @@ def main():
         else:
             skillsProfileUrl = argv[1]
             limit = int(argv[2])
+            
+            if limit <= 0:
+                raise ValueError('{limit} must be positive integer.')
 
         with request.urlopen(skillsProfileUrl) as f:
             contents = f.read()
@@ -97,6 +97,9 @@ def main():
             print('{} badge(s) found.'.format(badgeCount))
 
             if badgeCount > 0:
+                if badgeCount < limit:
+                    limit = badgeCount
+
                 print('Up to {} badge(s) will be printed.\n'.format(limit))
 
                 generate_readme_text(badge_data, limit)
