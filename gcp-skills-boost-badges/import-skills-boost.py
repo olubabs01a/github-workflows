@@ -7,7 +7,7 @@ from urllib import request
 def generate_readme_text(badges: dict, skillsProfileUrl: str, limit: int, timestamp: datetime):
     updates = '<!-- start latest badges --><hr />\n'    
     updates += '### **&#127882; {} Latest Badges from Google Cloud Skills Boost &#127882;**'.format(limit)
-    updates += '\n_Last checked: {}_'.format(timestamp.isoformat())
+    updates += '\n_Last checked: {}_'.format(timestamp.isoformat(' ', 'seconds'))
     updates += '\n\n'
 
     count = 1
