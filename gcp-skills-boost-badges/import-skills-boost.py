@@ -87,9 +87,9 @@ def main():
                     thumbnail = badgeEl.findNext('a')
                     thumbnail.find('img').attrs['title'] = completion              
                     thumbnail.find('img').attrs['width'] = '25%'
-                    thumbnailText = re.sub('\\n\\n+', '', thumbnail.text)
+                    thumbnail.setText(re.sub('\\n\\n+', '', thumbnail.text))
 
-                    badge_data[badgeName] = [thumbnailText, completion]
+                    badge_data[badgeName] = [thumbnail, completion]
 
                 if len(badge_data) >= limit:
                     break
