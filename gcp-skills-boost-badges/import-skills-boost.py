@@ -14,7 +14,7 @@ def generate_readme_text(badges: dict, limit):
     count = 1
     for badgeKey in badges.keys():
         completion = badges[badgeKey][1]
-        column = '{}&nbsp;&nbsp;&nbsp;'.format(badges[badgeKey][0])
+        column = '{}&emsp;&emsp;&emsp;'.format(badges[badgeKey][0])
 
         print('Badge #{} found => {}, {}\n'.format(count, badgeKey, completion))
 
@@ -73,7 +73,6 @@ def main():
             print('{} potential badge(s) found.'.format(badges.contents.count()))
 
             badge_data = dict()
-            count = 0
 
             for badgeEl in badges:
                 badge = badgeEl.findNext('span')
@@ -85,16 +84,15 @@ def main():
                     completion = re.sub('\\s\\s+' , ' ', completion)
 
                     # Add styling to badge thumbnail
-                    thumbnail = badgeEl.findNext('a') 
+                    thumbnail = badgeEl.findNext('a')
                     thumbnail.find('img').attrs['title'] = completion              
                     thumbnail.find('img').attrs['width'] = '25%'
+                    thumbnailText = re.sub('\\n\\n+', '', thumbnail.text)
 
-                    badge_data[badgeName] = [thumbnail, completion]
+                    badge_data[badgeName] = [thumbnailText, completion]
 
-                    count += 1
-
-                    if count > limit:
-                        break
+                if len(badge_data) >= limit:
+                    break
 
             badgeCount = len(badge_data)
 
