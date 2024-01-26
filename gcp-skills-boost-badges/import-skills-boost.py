@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime as dt, timezone
 from sys import argv
 from bs4 import BeautifulSoup
 import re
@@ -67,7 +67,7 @@ def main():
                 raise ValueError('{limit} must be positive integer.')
 
         with request.urlopen(skillsProfileUrl) as f:
-            timestamp = datetime.now(datetime.timezone.utc)
+            timestamp = dt.now(timezone.utc)
             contents = f.read()
 
             soup = BeautifulSoup(contents, 'html.parser')
