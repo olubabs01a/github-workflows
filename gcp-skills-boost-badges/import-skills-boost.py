@@ -9,20 +9,20 @@ limit = 3
 def generate_readme_text(badges: dict, limit):
     updates = '<!-- start latest badges --><hr />\n'    
     updates += '### **&#127882; {} Latest Badges from Google Cloud Skills Boost &#127882;**'.format(limit)
-    updates += '\n<ol>'
+    updates += '<br /><br />'
 
     count = 1
     for badgeKey in badges.keys():
         completion = badges[badgeKey][1]
-        row = '<li>' + completion + '<br /><br />'
-        row += '{}</li><br />'.format(badges[badgeKey][0])
+        column = '{}&nbsp;&nbsp;&nbsp;&nbsp;'.format(badges[badgeKey][0])
+        # row += '<li>' + completion + '<br /><br />'
 
         print('Badge #{} found => {}, {}\n'.format(count, badgeKey, completion))
 
-        updates += row
+        updates += column
         count += 1
 
-    updates += '</ol>\n\n'
+    updates += '<br /><br />'
     updates += '#### &#10024; Visit full profile [here]({}) &#10024;'.format(skillsProfileUrl)
     updates += '<hr /><!-- end latest badges -->'
 
@@ -85,14 +85,15 @@ def main():
                     completion = re.sub('\\s\\s+' , ' ', completion)
 
                     # Add styling to badge thumbnail
-                    thumbnail = badgeEl.findNext('a')               
+                    thumbnail = badgeEl.findNext('a') 
+                    thumbnail.find('img').attrs['title'] = completion              
                     thumbnail.find('img').attrs['width'] = '25%'
 
                     badge_data[badgeName] = [thumbnail, completion]
 
                     count += 1
 
-                    if count >= limit:
+                    if count > limit:
                         break
 
             badgeCount = len(badge_data)
