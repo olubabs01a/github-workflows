@@ -1,4 +1,4 @@
-from datetime import datetime as dt, timezone
+from datetime import datetime, timezone
 from sys import argv
 from bs4 import BeautifulSoup
 import re
@@ -67,7 +67,7 @@ def main():
                 raise ValueError('{limit} must be positive integer.')
 
         with request.urlopen(skillsProfileUrl) as f:
-            timestamp = dt.now(timezone.utc)
+            timestamp = datetime.now(timezone.utc)
             contents = f.read()
 
             soup = BeautifulSoup(contents, 'html.parser')
@@ -90,7 +90,6 @@ def main():
                     thumbnail = badgeEl.findNext('a')
                     thumbnail.find('img').attrs['title'] = completion              
                     thumbnail.find('img').attrs['width'] = '25%'
-                    thumbnail.setText(re.sub('\\n\\n+', '', thumbnail.text))
 
                     badge_data[badgeName] = [thumbnail, completion]
 
