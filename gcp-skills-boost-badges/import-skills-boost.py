@@ -70,7 +70,7 @@ def main():
             soup = BeautifulSoup(contents, 'html.parser')
 
             badges = soup.find('div', attrs={'class': 'profile-badges'})
-            print('{} potential badge(s) found.'.format(badges.contents.count()))
+            print('{} potential badge(s) found.'.format(len(badges)))
 
             badge_data = dict()
 
