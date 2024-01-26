@@ -9,20 +9,19 @@ limit = 3
 def generate_readme_text(badges: dict, limit):
     updates = '<!-- start latest badges --><hr />\n'    
     updates += '### **&#127882; {} Latest Badges from Google Cloud Skills Boost &#127882;**'.format(limit)
-    updates += '<br /><br />'
+    updates += '\n\n'
 
     count = 1
     for badgeKey in badges.keys():
         completion = badges[badgeKey][1]
-        column = '{}&nbsp;&nbsp;&nbsp;&nbsp;'.format(badges[badgeKey][0])
-        # row += '<li>' + completion + '<br /><br />'
+        column = '{}&nbsp;&nbsp;&nbsp;'.format(badges[badgeKey][0])
 
         print('Badge #{} found => {}, {}\n'.format(count, badgeKey, completion))
 
         updates += column
         count += 1
 
-    updates += '<br /><br />'
+    updates += '\n\n'
     updates += '#### &#10024; Visit full profile [here]({}) &#10024;'.format(skillsProfileUrl)
     updates += '<hr /><!-- end latest badges -->'
 
@@ -71,10 +70,11 @@ def main():
             soup = BeautifulSoup(contents, 'html.parser')
 
             badges = soup.find('div', attrs={'class': 'profile-badges'})
+            print('{} potential badge(s) found.'.format(badges.contents.count()))
 
             badge_data = dict()
-            
             count = 0
+
             for badgeEl in badges:
                 badge = badgeEl.findNext('span')
                 badgeName = badge.text.strip('\r\n')
@@ -97,13 +97,12 @@ def main():
                         break
 
             badgeCount = len(badge_data)
-            print('{} badge(s) found.'.format(badgeCount))
 
             if badgeCount > 0:
                 if badgeCount < limit:
                     limit = badgeCount
 
-                print('Up to {} badge(s) will be printed.\n'.format(limit))
+                print('{} badge(s) will be printed.\n'.format(limit))
 
                 generate_readme_text(badge_data, limit)
 
