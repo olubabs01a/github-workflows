@@ -1,3 +1,4 @@
+import datetime
 from sys import argv
 from bs4 import BeautifulSoup
 import re
@@ -6,9 +7,10 @@ from urllib import request
 skillsProfileUrl = ''
 limit = 3
 
-def generate_readme_text(badges: dict, limit):
+def generate_readme_text(badges: dict, limit, timestamp):
     updates = '<!-- start latest badges --><hr />\n'    
     updates += '### **&#127882; {} Latest Badges from Google Cloud Skills Boost &#127882;**'.format(limit)
+    updates += '\n_Last checked: {}_'.format(timestamp)
     updates += '\n\n'
 
     count = 1
@@ -65,6 +67,7 @@ def main():
                 raise ValueError('{limit} must be positive integer.')
 
         with request.urlopen(skillsProfileUrl) as f:
+            timestamp = datetime.now(datetime.timezone.utc)
             contents = f.read()
 
             soup = BeautifulSoup(contents, 'html.parser')
@@ -102,7 +105,7 @@ def main():
 
                 print('{} badge(s) will be printed.\n'.format(limit))
 
-                generate_readme_text(badge_data, limit)
+                generate_readme_text(badge_data, limit, timestamp)
 
     except Exception as e:
         print("An error occurred: ", e)
