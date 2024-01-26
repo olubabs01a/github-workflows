@@ -1,5 +1,4 @@
 from sys import argv
-import sys
 from bs4 import BeautifulSoup
 import re
 from urllib import request
@@ -22,9 +21,6 @@ def generate_readme_text(badges: dict, limit):
 
         updates += row
         count += 1
-
-        if count > limit:
-            break
 
     updates += '</ol>\n\n'
     updates += '#### &#10024; Visit full profile [here]({}) &#10024;'.format(skillsProfileUrl)
@@ -78,6 +74,7 @@ def main():
 
             badge_data = dict()
             
+            count = 0
             for badgeEl in badges:
                 badge = badgeEl.findNext('span')
                 badgeName = badge.text.strip('\r\n')
@@ -93,6 +90,11 @@ def main():
 
                     badge_data[badgeName] = [thumbnail, completion]
 
+                    count += 1
+
+                    if count >= limit:
+                        break
+
             badgeCount = len(badge_data)
             print('{} badge(s) found.'.format(badgeCount))
 
@@ -106,7 +108,7 @@ def main():
 
     except Exception as e:
         print("An error occurred: ", e)
-        sys.exit(1)
+        raise e
 
 if __name__ == "__main__":
     main()
