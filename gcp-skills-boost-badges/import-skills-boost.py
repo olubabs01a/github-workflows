@@ -4,13 +4,10 @@ from bs4 import BeautifulSoup
 import re
 from urllib import request
 
-skillsProfileUrl = ''
-limit = 3
-
-def generate_readme_text(badges: dict, limit, timestamp):
+def generate_readme_text(badges: dict, skillsProfileUrl: str, limit: int, timestamp: datetime):
     updates = '<!-- start latest badges --><hr />\n'    
     updates += '### **&#127882; {} Latest Badges from Google Cloud Skills Boost &#127882;**'.format(limit)
-    updates += '\n_Last checked: {}_'.format(timestamp)
+    updates += '\n_Last checked: {}_'.format(timestamp.isoformat())
     updates += '\n\n'
 
     count = 1
@@ -104,7 +101,7 @@ def main():
 
                 print('{} badge(s) will be printed.\n'.format(limit))
 
-                generate_readme_text(badge_data, limit, timestamp)
+                generate_readme_text(badge_data, skillsProfileUrl, limit, timestamp)
 
     except Exception as e:
         print("An error occurred: ", e)
