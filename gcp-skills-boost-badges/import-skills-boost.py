@@ -89,7 +89,7 @@ def main():
 
                     # Add styling to badge thumbnail
                     thumbnail = badgeEl.findNext('a')               
-                    thumbnail.find('img').attrs['style'] = ['max-width: 15rem;']
+                    thumbnail.find('img').attrs['style'] = ['max-width: 25%;']
 
                     badge_data[badgeName] = [thumbnail, completion]
 
