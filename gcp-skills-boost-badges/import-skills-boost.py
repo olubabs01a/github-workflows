@@ -9,7 +9,7 @@ limit = 3
 
 def generate_readme_text(badges: dict, limit = 3):
     updates = '<!-- start latest badges --><hr />\n'
-    updates += '### **&#127882; Latest Badges from Google Cloud Skills Boost &#127882;**'.format(limit)
+    updates += '### **&#127882; {} Latest Badges from Google Cloud Skills Boost &#127882;**'.format(limit)
     updates += '\n<ol>'
 
     if len(badges) < limit or limit <= 0:
