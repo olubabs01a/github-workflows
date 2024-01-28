@@ -13,7 +13,10 @@ def generate_readme_text(badges: dict, skillsProfileUrl: str, limit: int, timest
     count = 1
     for badgeKey in badges.keys():
         completion = badges[badgeKey][1]
-        column = '{} &emsp;&emsp;&emsp;'.format(badges[badgeKey][0])
+
+        # Remove extra new lines in <a>
+        badgeHtml = ''.join(re.split(r'[\n\t]+', str(badges[badgeKey][0])))
+        column = '{}&emsp;&emsp;&emsp;'.format(badgeHtml)
 
         print('Badge #{} found => {}, {}\n'.format(count, badgeKey, completion))
 
