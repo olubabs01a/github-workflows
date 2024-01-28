@@ -13,7 +13,7 @@ def generate_readme_text(badges: dict, skillsProfileUrl: str, limit: int, timest
     count = 1
     for badgeKey in badges.keys():
         completion = badges[badgeKey][1]
-        column = '{}&emsp;&emsp;&emsp;'.format(badges[badgeKey][0])
+        column = '{} &emsp;&emsp;&emsp;'.format(badges[badgeKey][0])
 
         print('Badge #{} found => {}, {}\n'.format(count, badgeKey, completion))
 
@@ -85,8 +85,11 @@ def main():
 
                     # Add styling to badge thumbnail
                     thumbnail = badgeEl.findNext('a')
-                    thumbnail.find('img').attrs['title'] = completion              
-                    thumbnail.find('img').attrs['width'] = '25%'
+                    img = thumbnail.find('img')
+
+                    img.attrs['title'] = completion              
+                    img.attrs['width'] = '25%'
+                    img.select('style').append('border-radius: 1rem;')
 
                     badge_data[badgeName] = [thumbnail, completion]
 
