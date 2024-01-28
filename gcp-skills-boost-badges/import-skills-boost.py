@@ -92,7 +92,7 @@ def main():
 
                     img.attrs['title'] = completion              
                     img.attrs['width'] = '25%'
-                    img.select('style').append('border-radius: 1rem;')
+                    img.attrs['style'] = 'border-radius: 1rem;'
 
                     badge_data[badgeName] = [thumbnail, completion]
 
