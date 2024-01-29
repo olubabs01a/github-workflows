@@ -4,9 +4,20 @@ from bs4 import BeautifulSoup
 import re
 from urllib import request
 
-def generate_readme_text(badges: dict, skillsProfileUrl: str, limit: int, timestamp: datetime):
+def generate_readme_text(badges: dict, skillsProfileUrl: str, numBadges: int, timestamp: datetime):
+    """Replaces placeholder in target file with HTML for imported badges
+
+    Args:
+        badges (dict): Imported badges from Google Cloud Skills Boost
+        skillsProfileUrl (str): URL of a public Google Skills Boost profile
+        numBadges (int): Number of badges to output
+        timestamp (datetime): Timestamp of badges import
+
+    Raises:
+        Exception: Error during file write or placeholder pattern not found
+    """
     updates = '<!-- start latest badges --><hr />\n'    
-    updates += '### **&#127882; {} Latest Badges from Google Cloud Skills Boost &#127882;**'.format(limit)
+    updates += '### **&#127882; {} Latest Badges from Google Cloud Skills Boost &#127882;**'.format(numBadges)
     updates += '\n_Last checked: {}_'.format(timestamp.isoformat(' ', 'seconds'))
     updates += '\n\n'
 
@@ -55,16 +66,23 @@ def generate_readme_text(badges: dict, skillsProfileUrl: str, limit: int, timest
         raise Exception('Badge destination pattern not found in {}'.format(fileName))
 
 def main():
+    """Imports badges from a provided Google Cloud Skills public profile into README
+
+    Raises:
+        ValueError: Invalid number of arguments provided. This method expects: {skillsProfileUrl} {numBadges}
+        ValueError: {numBadges} must be greater than 0
+        Exception: Error during generate_readme_text(), or other.
+    """
     try:
         # Check provided arguments
         if len(argv) != 3:
-            raise ValueError('Invalid number of arguments provided. Expected: {skillsProfileUrl} {limit}')
+            raise ValueError('Invalid number of arguments provided. Expected: {skillsProfileUrl} {numBadges}')
         else:
             skillsProfileUrl = argv[1]
-            limit = int(argv[2])
+            numBadges = int(argv[2])
             
-            if limit <= 0:
-                raise ValueError('{limit} must be positive integer.')
+            if numBadges <= 0:
+                raise ValueError('{numBadges} must be positive integer.')
 
         with request.urlopen(skillsProfileUrl) as f:
             timestamp = datetime.now(timezone.utc)
@@ -95,22 +113,22 @@ def main():
 
                     badge_data[badgeName] = [thumbnail, completion]
 
-                if len(badge_data) >= limit:
+                if len(badge_data) >= numBadges:
                     break
 
             badgeCount = len(badge_data)
 
             if badgeCount > 0:
-                if badgeCount < limit:
-                    limit = badgeCount
+                if badgeCount < numBadges:
+                    numBadges = badgeCount
 
-                print('{} badge(s) will be printed.\n'.format(limit))
+                print('{} badge(s) will be printed.\n'.format(numBadges))
 
-                generate_readme_text(badge_data, skillsProfileUrl, limit, timestamp)
+                generate_readme_text(badge_data, skillsProfileUrl, numBadges, timestamp)
 
     except Exception as e:
-        print("An error occurred: ", e)
-        raise e
+        print("An error occurred:", e)
+        raise
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
