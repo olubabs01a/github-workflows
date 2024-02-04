@@ -9,6 +9,9 @@ on:
       badge-count:
         required: true
         type: number
+      badge-size:
+        default: 'm'
+        type: string
       repo-name:
         required: true
         type: string
@@ -53,7 +56,7 @@ jobs:
       - name: Check for updated Skills Boost Badges
         run: |
           cd readme
-          python -u ./import-skills-boost.py ${{ inputs.skills-boost-url }} ${{ inputs.badge-count }}
+          python -u ./import-skills-boost.py ${{ inputs.skills-boost-url }} ${{ inputs.badge-count }} ${{ inputs.badge-size }}
       - name: Commit and push
         if: success()
         run: |-
