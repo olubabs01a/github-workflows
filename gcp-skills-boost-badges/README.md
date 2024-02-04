@@ -29,7 +29,7 @@ jobs:
 | `badge-count` | _number_ | True | Maximum number of badges to display in target file, e.g. `README.md`. |
 | `repo-name` | _string_ | True | The repository where the workflow is contained, i.e. `olubabs01a/github-workflows` |
 | `repo-ref` | _string_ | True | Branch or tag name. |
-| `clone-path` | _string_ | True | Folder containing Skills badges worklow, i.e. `gcp-skills-boost-badges` |
+| `clone-path` | _string_ | True | Folder containing Skills badges workflow, i.e. `gcp-skills-boost-badges` |
 
 ### Required placeholder pattern in target file, e.g. `README.md`
 ```
