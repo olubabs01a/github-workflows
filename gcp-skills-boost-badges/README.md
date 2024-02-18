@@ -15,6 +15,7 @@ jobs:
     uses: olubabs01a/github-workflows/.github/workflows/update-readme.yaml@<source-branch>
     with:
       skills-boost-url: <public Skills Boost URL>
+      target-file: <target file to update>
       badge-count: <max badges displayed>
       repo-name: olubabs01a/github-workflows
       repo-ref: <source-branch>
@@ -25,8 +26,9 @@ jobs:
 ### Arguments
 | Argument Name | Type | Required | Description |
 | - | - | - | - |
-| `skills-boost-url` | _string_ | True | URL for public Skills Boost profile. |
-| `badge-count` | _number_ | True | Maximum number of badges to display in target file, e.g. `README.md`. |
+| `skills-boost-url` | _string_ | True | URL for public Skills Boost profile |
+| `target-file` | _string_ | True | Target file to update with badges, e.g. `README.md` |
+| `badge-count` | _number_ | True | Maximum number of badges to display in target file |
 | `repo-name` | _string_ | True | The repository where the workflow is contained, i.e. `olubabs01a/github-workflows` |
 | `repo-ref` | _string_ | True | Branch or tag name. |
 | `clone-path` | _string_ | True | Folder containing Skills badges workflow, i.e. `gcp-skills-boost-badges` |

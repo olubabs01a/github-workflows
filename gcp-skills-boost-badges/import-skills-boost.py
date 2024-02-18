@@ -1,10 +1,11 @@
 from datetime import datetime, timezone
 from sys import argv
 from bs4 import BeautifulSoup
+import os.path as path
 import re
 from urllib import request
 
-def generate_readme_text(badges: dict, skillsProfileUrl: str, numBadges: int, timestamp: datetime):
+def generate_readme_text(badges: dict, skillsProfileUrl: str, fileName: str, numBadges: int, timestamp: datetime):
     """Replaces placeholder in target file with HTML for imported badges
 
     Args:
@@ -39,7 +40,6 @@ def generate_readme_text(badges: dict, skillsProfileUrl: str, numBadges: int, ti
     updates += '<hr /><!-- end latest badges -->'
 
     # Rewrite README with new post content
-    fileName = 'README.md'
     currentText = open(fileName, mode='r', encoding='utf8').read();
 
     badgePattern = r'<!-- start latest badges -->[\S\s]*<!-- end latest badges -->'
@@ -66,21 +66,26 @@ def generate_readme_text(badges: dict, skillsProfileUrl: str, numBadges: int, ti
         raise Exception('Badge destination pattern not found in {}'.format(fileName))
 
 def main():
-    """Imports badges from a provided Google Cloud Skills public profile into README
+    """Imports badges from a provided Google Cloud Skills public profile into target file
 
     Raises:
-        ValueError: Invalid number of arguments provided. This method expects: {skillsProfileUrl} {numBadges}
+        ValueError: Invalid number of arguments provided. This method expects: {skillsProfileUrl} {targetFile} {numBadges}
+        FileNotFoundError: {targetFile} must be valid file in directory
         ValueError: {numBadges} must be greater than 0
-        Exception: Error during generate_readme_text(), or other.
+        Exception: Error during generate_readme_text(), or other
     """
     try:
         # Check provided arguments
-        if len(argv) != 3:
-            raise ValueError('Invalid number of arguments provided. Expected: {skillsProfileUrl} {numBadges}')
+        if len(argv) != 4:
+            raise ValueError('Invalid number of arguments provided. Expected: {skillsProfileUrl} {targetFile} {numBadges}')
         else:
             skillsProfileUrl = argv[1]
-            numBadges = int(argv[2])
-            
+            fileName = argv[2]
+            numBadges = int(argv[3])
+
+            if path.exists(fileName) == False:
+                raise FileNotFoundError('{{targetFile}} must be a valid file. (Provided: \'{}\')'.format(fileName))
+
             if numBadges <= 0:
                 raise ValueError('{numBadges} must be positive integer.')
 
@@ -124,7 +129,7 @@ def main():
 
                 print('{} badge(s) will be printed.\n'.format(numBadges))
 
-                generate_readme_text(badge_data, skillsProfileUrl, numBadges, timestamp)
+                generate_readme_text(badge_data, skillsProfileUrl, fileName, numBadges, timestamp)
 
     except Exception as e:
         print("An error occurred:", e)

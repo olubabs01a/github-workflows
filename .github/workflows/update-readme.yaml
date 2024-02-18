@@ -6,6 +6,9 @@ on:
       skills-boost-url:
         required: true
         type: string
+      target-file:
+        default: 'README.md'
+        type: string
       badge-count:
         required: true
         type: number
@@ -53,7 +56,7 @@ jobs:
       - name: Check for updated Skills Boost Badges
         run: |
           cd readme
-          python -u ./import-skills-boost.py ${{ inputs.skills-boost-url }} ${{ inputs.badge-count }}
+          python -u ./import-skills-boost.py ${{ inputs.skills-boost-url }} ${{ inputs.target-file }} ${{ inputs.badge-count }}
       - name: Commit and push
         if: success()
         run: |-
