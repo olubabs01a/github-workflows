@@ -69,20 +69,36 @@ def main():
     """Imports badges from a provided Google Cloud Skills public profile into README
 
     Raises:
-        ValueError: Invalid number of arguments provided. This method expects: {skillsProfileUrl} {numBadges}
-        ValueError: {numBadges} must be greater than 0
+        ValueError: Invalid number of arguments provided. This method expects: {skillsProfileUrl} {numBadges} {badgeSize?}
+        ValueError: {numBadges} must be a number and greater than 0
+        ValueError: {badgeSize} must be 's', 'm', 'l', 'xl'
         Exception: Error during generate_readme_text(), or other.
     """
     try:
         # Check provided arguments
-        if len(argv) != 3:
-            raise ValueError('Invalid number of arguments provided. Expected: {skillsProfileUrl} {numBadges}')
+        if len(argv) < 3 or len(argv) > 4:
+            raise ValueError('Invalid number of arguments provided. Expected: {skillsProfileUrl} {numBadges} {badgeSize?}')        
         else:
             skillsProfileUrl = argv[1]
             numBadges = int(argv[2])
             
             if numBadges <= 0:
-                raise ValueError('{numBadges} must be positive integer.')
+                raise ValueError('{{numBadges}} must be positive integer. (Provided: \'{}\')'.format(argv[2]))
+
+            badgeSize = 'm'
+            badgeSizes = {
+                's': '10%',
+                'm': '25%',
+                'l': '50%',
+                'xl': '100%'
+            }
+
+            # Validate optional badge size argument if provided
+            if len(argv) == 4:
+                badgeSize = argv[3]
+                    
+                if badgeSizes.get(badgeSize.lower()) == None:
+                    raise ValueError('{{badgeSize}} must be one of: {}. (Provided: \'{}\')'.format(", ".join([str(x) for x in badgeSizes.keys()]), badgeSize))
 
         with request.urlopen(skillsProfileUrl) as f:
             timestamp = datetime.now(timezone.utc)
@@ -108,8 +124,8 @@ def main():
                     thumbnail = badgeEl.findNext('a')
                     img = thumbnail.find('img')
 
-                    img.attrs['title'] = completion              
-                    img.attrs['width'] = '25%'
+                    img.attrs['title'] = completion
+                    img.attrs['width'] = badgeSizes[badgeSize]
 
                     badge_data[badgeName] = [thumbnail, completion]
 
