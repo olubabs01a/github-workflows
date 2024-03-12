@@ -18,7 +18,7 @@ def generate_readme_text(badges: dict, skillsProfileUrl: str, numBadges: int, ti
     """
     updates = '<!-- start latest badges --><hr />\n'    
     updates += '### **&#127882; {} Latest Badges from Google Cloud Skills Boost &#127882;**'.format(numBadges)
-    updates += '\n_Last checked: {}_'.format(timestamp.isoformat(' ', 'seconds'))
+    updates += '\n_Last updated: {}_'.format(timestamp.isoformat(' ', 'seconds'))
     updates += '\n\n'
 
     count = 1
