@@ -1,0 +1,68 @@
+name: Import Skills Badges
+
+on:
+  workflow_call:
+    inputs:
+      skills-boost-url:
+        required: true
+        type: string
+      badge-count:
+        required: true
+        type: number
+      badge-size:
+        default: 'm'
+        type: string
+      repo-name:
+        required: true
+        type: string
+      repo-ref:
+        required: true
+        type: string
+      clone-path:
+        required: true
+        type: string
+
+jobs:
+  skills-boost-badges:
+    name: Import Skills Boost badges
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: readme
+      - uses: actions/checkout@v4
+        name: Checkout '${{ inputs.repo-ref }}' to '${{ inputs.clone-path }}'
+        with:
+          repository: ${{ inputs.repo-name }}
+          ref: ${{ inputs.repo-ref }}
+          path: ${{ inputs.clone-path }}
+          sparse-checkout: ${{ inputs.clone-path }}
+          sparse-checkout-cone-mode: false
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          # Semantic version range syntax
+          python-version: 3.x
+          architecture: x64
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install bs4
+      - name: Setup directories
+        run: |
+          mv ${{ inputs.clone-path }}/${{ inputs.clone-path }}/*.py readme/
+      - name: Check for updated Skills Boost Badges
+        run: |
+          cd readme
+          python -u ./import-skills-boost.py ${{ inputs.skills-boost-url }} ${{ inputs.badge-count }} ${{ inputs.badge-size }}
+      - name: Commit and push
+        if: success()
+        run: |-
+          cd readme
+          git diff -I '^_Last updated:'
+          git config --global user.email "actions@users.noreply.github.com"
+          git config --global user.name "README-bot"
+          git add README.md
+          git commit -m "Update badges" && git push || git reset
